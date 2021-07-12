@@ -659,7 +659,7 @@ def adapool1d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
     beta_shape = list(beta.shape)
     shape_d = [s*kernel_size[i] for i,s in enumerate(shape)]
 
-    assert shape == beta_shape, 'Required `beta` shape {0} does not match given shape {1}'.format(shape, beta_shape)
+    assert shape == beta_shape or beta_shape==[1], 'Required `beta` shape {0} does not match given shape {1}'.format(shape, beta_shape)
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
     if not native:
@@ -711,7 +711,7 @@ def adapool2d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
     beta_shape = list(beta.shape)
     shape_d = [s*kernel_size[i] for i,s in enumerate(shape)]
 
-    assert shape == beta_shape, 'Required `beta` shape {0} does not match given shape {1}'.format(shape, beta_shape)
+    assert shape == beta_shape or beta_shape==[1,1], 'Required `beta` shape {0} does not match given shape {1}'.format(shape, beta_shape)
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
     if not native:
@@ -764,7 +764,7 @@ def adapool3d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
     beta_shape = list(beta.shape)
     shape_d = [s*kernel_size[i] for i,s in enumerate(shape)]
 
-    assert shape==beta_shape, 'Required `beta` shape {0} does not match given shape {1}'.format(shape, beta_shape)
+    assert shape==beta_shape or beta_shape==[1,1,1], 'Required `beta` shape {0} does not match given shape {1}'.format(shape, beta_shape)
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
     if not native:

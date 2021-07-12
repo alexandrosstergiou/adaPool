@@ -24,6 +24,15 @@ print('\033[38;2;77;216;173m' + '--- Performing checks for forward ---' + '\033[
 
 print('\033[38;2;199;246;236m' + '> Checking 1D ...' + '\033[0m')
 
+p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=(1))
+_ = p_1d(x_1d)
+
+p_2d = AdaPool2d(dtype=x_2d.dtype,device=x_2d.get_device(),beta=(1,1))
+_ = p_2d(x_2d)
+
+p_3d = AdaPool3d(dtype=x_3d.dtype,device=x_3d.get_device(),beta=(1,1,1))
+_ = p_3d(x_3d)
+
 try:
     p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=beta_1d)
     pool_1d = p_1d(x_1d)

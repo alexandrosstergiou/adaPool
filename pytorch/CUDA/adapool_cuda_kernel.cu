@@ -43,13 +43,16 @@ __device__  scalar_t huber(const scalar_t x1, const scalar_t x2, const scalar_t 
 // Euclidean distance
 template <typename scalar_t>
 __device__  scalar_t l2(const scalar_t x1, const scalar_t x2) {
-  const scalar_t result = abs(x1-x2)/sqrt(pow(x1-x2,2));
+  //const scalar_t result = abs(x1-x2)/sqrt(pow(x1-x2,2));
+  const scalar_t result = (x1*x2)/(sqrt(pow(x1,2))+sqrt(pow(x2,2)));
+  //const scalar_t result = (2*x1*x2)/((x1*x1)+(x2*x2));
   return result;
 }
 
 // Jaccard Vector Similarity
 template <typename scalar_t>
 __device__  scalar_t jvs(const scalar_t x1, const scalar_t x2) {
+  //const scalar_t result = (x1*x2)/(sqrt(pow(x1,2))+sqrt(pow(x2,2)));
   const scalar_t result = (2*x1*x2)/((x1*x1)+(x2*x2));
   return result;
 }
@@ -2408,7 +2411,7 @@ __global__ void IDW_Pool2dForward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
           const int offset = y_offset*width + x_offset;
 
-          scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+          scalar_t dist = l2(offset_bottom_input[offset], act_avg);
 
           scalar_t mask_ = pow(dist,-1)/mask_sum_avg;
 
@@ -2516,7 +2519,7 @@ __global__ void IDW_Pool3dForward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
             const int offset = d_offset*height + y_offset*width + x_offset;
 
-            scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+            scalar_t dist = l2(offset_bottom_input[offset], act_avg);
 
             scalar_t mask_ = pow(dist,-1)/mask_sum_avg;
 
