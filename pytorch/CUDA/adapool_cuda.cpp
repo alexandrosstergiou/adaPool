@@ -9,7 +9,7 @@ int AdaPool1dForwardLauncher(const at::Tensor input, const at::Tensor beta,
                              const int stride_d, at::Tensor output,
                              const bool return_mask, at::Tensor mask);
 
-int Ada_EJVSW_Pool1dForwardLauncher(const at::Tensor input, const int batches,
+int Ada_EDSCW_Pool1dForwardLauncher(const at::Tensor input, const int batches,
                                    const int channels, const int dim,
                                    const int kernel_d, const int stride_d,
                                    at::Tensor output, const bool return_mask,
@@ -33,7 +33,7 @@ int AdaPool1dBackwardLauncher(const at::Tensor output_grad, const at::Tensor inp
                               const int kernel_d, const int stride_d,
                               at::Tensor input_grad, at::Tensor beta_grad);
 
-int Ada_EJVSW_Pool1dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
+int Ada_EDSCW_Pool1dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
                                     const int batches, const int channels,
                                     const int dim, const int kernel_d,
                                     const int stride_d, at::Tensor input_grad);
@@ -56,7 +56,7 @@ int AdaPool2dForwardLauncher(const at::Tensor input, const at::Tensor beta,
                              at::Tensor output, const bool return_mask,
                              at::Tensor mask);
 
-int Ada_EJVSW_Pool2dForwardLauncher(const at::Tensor input, const int batches,
+int Ada_EDSCW_Pool2dForwardLauncher(const at::Tensor input, const int batches,
                                    const int channels, const int height,
                                    const int width, const int kernel_h,
                                    const int kernel_w, const int stride_h,
@@ -85,7 +85,7 @@ int AdaPool2dBackwardLauncher(const at::Tensor output_grad, const at::Tensor inp
                               const int stride_w, at::Tensor input_grad,
                               at::Tensor beta_grad);
 
-int Ada_EJVSW_Pool2dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
+int Ada_EDSCW_Pool2dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
                                     const int batches, const int channels,
                                     const int height, const int width,
                                     const int kernel_h, const int kernel_w,
@@ -115,7 +115,7 @@ int AdaPool3dForwardLauncher(const at::Tensor input, const at::Tensor beta,
                              const int stride_w, at::Tensor output,
                              const bool return_mask, at::Tensor mask);
 
-int Ada_EJVSW_Pool3dForwardLauncher(const at::Tensor input, const int batches,
+int Ada_EDSCW_Pool3dForwardLauncher(const at::Tensor input, const int batches,
                                    const int channels, const int depth,
                                    const int height, const int width,
                                    const int kernel_d, const int kernel_h,
@@ -151,7 +151,7 @@ int AdaPool3dBackwardLauncher(const at::Tensor output_grad, const at::Tensor inp
                               const int stride_h, const int stride_w,
                               at::Tensor input_grad, at::Tensor beta_grad);
 
-int Ada_EJVSW_Pool3dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
+int Ada_EDSCW_Pool3dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
                                     const int batches, const int channels,
                                     const int depth, const int height,
                                     const int width, const int kernel_d,
@@ -207,7 +207,7 @@ int adapool1d_forward(at::Tensor input, at::Tensor beta,
     return 1;
 }
 
-int ada_ejvsw_pool1d_forward(at::Tensor input, const std::tuple<int> kernel,
+int ada_edscw_pool1d_forward(at::Tensor input, const std::tuple<int> kernel,
                             const std::tuple<int> stride, at::Tensor output,
                             bool return_mask, at::Tensor mask) {
     CHECK_INPUT(input);
@@ -221,7 +221,7 @@ int ada_ejvsw_pool1d_forward(at::Tensor input, const std::tuple<int> kernel,
     int kernel_d = std::get<0>(kernel);
     int stride_d = std::get<0>(stride);
 
-    Ada_EJVSW_Pool1dForwardLauncher(input, batches,
+    Ada_EDSCW_Pool1dForwardLauncher(input, batches,
                                    channels, dim,
                                    kernel_d, stride_d,
                                    output, return_mask,
@@ -299,7 +299,7 @@ int adapool1d_backward(const at::Tensor output_grad, const at::Tensor input,
     return 1;
 }
 
-int ada_ejvsw_pool1d_backward(const at::Tensor output_grad, const at::Tensor input,
+int ada_edscw_pool1d_backward(const at::Tensor output_grad, const at::Tensor input,
                              const std::tuple<int> kernel, const std::tuple<int> stride,
                              at::Tensor input_grad) {
     CHECK_INPUT(output_grad);
@@ -313,7 +313,7 @@ int ada_ejvsw_pool1d_backward(const at::Tensor output_grad, const at::Tensor inp
     int kernel_d = std::get<0>(kernel);
     int stride_d = std::get<0>(stride);
 
-    Ada_EJVSW_Pool1dBackwardLauncher(output_grad, input,
+    Ada_EDSCW_Pool1dBackwardLauncher(output_grad, input,
                                     batches, channels,
                                     dim, kernel_d,
                                     stride_d, input_grad);
@@ -391,7 +391,7 @@ int adapool2d_forward(at::Tensor input, at::Tensor beta, const std::tuple<int, i
     return 1;
 }
 
-int ada_ejvsw_pool2d_forward(at::Tensor input, const std::tuple<int, int> kernel,
+int ada_edscw_pool2d_forward(at::Tensor input, const std::tuple<int, int> kernel,
                             const std::tuple<int, int> stride, at::Tensor output,
                             bool return_mask, at::Tensor mask) {
     CHECK_INPUT(input);
@@ -408,7 +408,7 @@ int ada_ejvsw_pool2d_forward(at::Tensor input, const std::tuple<int, int> kernel
     int stride_h = std::get<0>(stride);
     int stride_w = std::get<1>(stride);
 
-    Ada_EJVSW_Pool2dForwardLauncher(input, batches,
+    Ada_EDSCW_Pool2dForwardLauncher(input, batches,
                                    channels, height,
                                    width, kernel_h,
                                    kernel_w, stride_h,
@@ -500,7 +500,7 @@ int adapool2d_backward(const at::Tensor output_grad, const at::Tensor input,
     return 1;
 }
 
-int ada_ejvsw_pool2d_backward(const at::Tensor output_grad, const at::Tensor input,
+int ada_edscw_pool2d_backward(const at::Tensor output_grad, const at::Tensor input,
                              const std::tuple<int, int> kernel, const std::tuple<int, int> stride,
                              at::Tensor input_grad) {
     CHECK_INPUT(output_grad);
@@ -517,7 +517,7 @@ int ada_ejvsw_pool2d_backward(const at::Tensor output_grad, const at::Tensor inp
     int stride_h = std::get<0>(stride);
     int stride_w = std::get<1>(stride);
 
-    Ada_EJVSW_Pool2dBackwardLauncher(output_grad, input,
+    Ada_EDSCW_Pool2dBackwardLauncher(output_grad, input,
                                     batches, channels,
                                     height, width,
                                     kernel_h, kernel_w,
@@ -610,7 +610,7 @@ int adapool3d_forward(at::Tensor input, at::Tensor beta,
     return 1;
 }
 
-int ada_ejvsw_pool3d_forward(at::Tensor input, const std::tuple<int, int, int> kernel,
+int ada_edscw_pool3d_forward(at::Tensor input, const std::tuple<int, int, int> kernel,
                             const std::tuple<int, int, int> stride, at::Tensor output,
                             bool return_mask, at::Tensor mask) {
     CHECK_INPUT(input);
@@ -630,7 +630,7 @@ int ada_ejvsw_pool3d_forward(at::Tensor input, const std::tuple<int, int, int> k
     int stride_h = std::get<1>(stride);
     int stride_w = std::get<2>(stride);
 
-    Ada_EJVSW_Pool3dForwardLauncher(input, batches,
+    Ada_EDSCW_Pool3dForwardLauncher(input, batches,
                                    channels, depth,
                                    height, width,
                                    kernel_d, kernel_h,
@@ -739,7 +739,7 @@ int adapool3d_backward(const at::Tensor output_grad, const at::Tensor input,
     return 1;
 }
 
-int ada_ejvsw_pool3d_backward(const at::Tensor output_grad, const at::Tensor input,
+int ada_edscw_pool3d_backward(const at::Tensor output_grad, const at::Tensor input,
                              const std::tuple<int, int, int> kernel, const std::tuple<int, int, int> stride,
                              at::Tensor input_grad) {
     CHECK_INPUT(output_grad);
@@ -759,7 +759,7 @@ int ada_ejvsw_pool3d_backward(const at::Tensor output_grad, const at::Tensor inp
     int stride_h = std::get<1>(stride);
     int stride_w = std::get<2>(stride);
 
-    Ada_EJVSW_Pool3dBackwardLauncher(output_grad, input,
+    Ada_EDSCW_Pool3dBackwardLauncher(output_grad, input,
                                     batches, channels,
                                     depth, height,
                                     width, kernel_d,
@@ -832,36 +832,36 @@ int ada_em_pool3d_backward(const at::Tensor output_grad, const at::Tensor input,
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("forward_1d", &adapool1d_forward, "AdaPool1d forward");
-  m.def("forward_1d_ejvsw", &ada_ejvsw_pool1d_forward, "AdaPool1d forward (EJVSW)");
+  m.def("forward_1d_edscw", &ada_edscw_pool1d_forward, "AdaPool1d forward (EDSCW)");
   m.def("forward_1d_em", &ada_em_pool1d_forward, "AdaPool1d forward (EM)");
   m.def("forward_1d_idw", &idw_pool1d_forward, "IDWPool1d forward");
 
   m.def("backward_1d", &adapool1d_backward, "AdaPool1d backward");
-  m.def("backward_1d_ejvsw", &ada_ejvsw_pool1d_backward, "AdaPool1d backward (EJVSW)");
+  m.def("backward_1d_edscw", &ada_edscw_pool1d_backward, "AdaPool1d backward (EDSCW)");
   m.def("backward_1d_em", &ada_em_pool1d_backward, "AdaPool1d backward (EM)");
   m.def("backward_1d_idw", &idw_pool1d_backward, "IDWPool1d backward");
 
 
   m.def("forward_2d", &adapool2d_forward, "AdaPool2d forward");
-  m.def("forward_2d_ejvsw", &ada_ejvsw_pool2d_forward, "AdaPool2d forward (EJVSW)");
+  m.def("forward_2d_edscw", &ada_edscw_pool2d_forward, "AdaPool2d forward (EDSCW)");
   m.def("forward_2d_em", &ada_em_pool2d_forward, "AdaPool2d forward (EM)");
   m.def("forward_2d_idw", &idw_pool2d_forward, "IDWPool2d forward");
 
 
   m.def("backward_2d", &adapool2d_backward, "AdaPool2d backward");
-  m.def("backward_2d_ejvsw", &ada_ejvsw_pool2d_backward, "AdaPool2d backward (EJVSW)");
+  m.def("backward_2d_edscw", &ada_edscw_pool2d_backward, "AdaPool2d backward (EDSCW)");
   m.def("backward_2d_em", &ada_em_pool2d_backward, "AdaPool2d backward (EM)");
   m.def("backward_2d_idw", &idw_pool2d_backward, "IDWPool2d backward");
 
 
   m.def("forward_3d", &adapool3d_forward, "AdaPool3d forward");
-  m.def("forward_3d_ejvsw", &ada_ejvsw_pool3d_forward, "AdaPool3d forward (EJVSW)");
+  m.def("forward_3d_edscw", &ada_edscw_pool3d_forward, "AdaPool3d forward (EDSCW)");
   m.def("forward_3d_em", &ada_em_pool3d_forward, "AdaPool3d forward (EM)");
   m.def("forward_3d_idw", &idw_pool3d_forward, "IDWPool3d forward");
 
 
   m.def("backward_3d", &adapool3d_backward, "AdaPool3d backward");
-  m.def("backward_3d_ejvsw", &ada_ejvsw_pool3d_backward, "AdaPool3d backward (EJVSW)");
+  m.def("backward_3d_edscw", &ada_edscw_pool3d_backward, "AdaPool3d backward (EDSCW)");
   m.def("backward_3d_em", &ada_em_pool3d_backward, "AdaPool3d backward (EM)");
   m.def("backward_3d_idw", &idw_pool3d_backward, "IDWPool3d backward");
 }

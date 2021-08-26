@@ -63,7 +63,7 @@ class CUDA_ADAPOOL1d(Function):
 
 
 
-class CUDA_ADAPOOL1d_EJVSW(Function):
+class CUDA_ADAPOOL1d_EDSCW(Function):
 
     @staticmethod
     @torch.cuda.amp.custom_fwd(cast_inputs=torch.float32)
@@ -86,14 +86,14 @@ class CUDA_ADAPOOL1d_EJVSW(Function):
         else:
             mask = input.new_zeros((1))
 
-        adapool_cuda.forward_1d_ejvsw(input.contiguous(), kernel, stride, output, return_mask, mask)
+        adapool_cuda.forward_1d_edscw(input.contiguous(), kernel, stride, output, return_mask, mask)
         ctx.save_for_backward(input)
         ctx.kernel = kernel
         ctx.stride = stride
         if return_mask:
             mask_ = mask.detach().clone()
             mask_.requires_grad = False
-            CUDA_ADAPOOL1d_EJVSW.mask = mask_
+            CUDA_ADAPOOL1d_EDSCW.mask = mask_
         output = torch.nan_to_num(output)
         if no_batch:
             return output.squeeze_(0)
@@ -106,7 +106,7 @@ class CUDA_ADAPOOL1d_EJVSW(Function):
         grad_input = torch.zeros_like(ctx.saved_tensors[0])
 
         saved = [grad_output] + list(ctx.saved_tensors) + [ctx.kernel, ctx.stride, grad_input]
-        adapool_cuda.backward_1d_ejvsw(*saved)
+        adapool_cuda.backward_1d_edscw(*saved)
 
         return torch.nan_to_num(saved[-1]), None, None, None
 
@@ -142,7 +142,7 @@ class CUDA_IDWPOOL1d(Function):
         if return_mask:
             mask_ = mask.detach().clone()
             mask_.requires_grad = False
-            CUDA_ADAPOOL1d_EJVSW.mask = mask_
+            CUDA_ADAPOOL1d_EDSCW.mask = mask_
         output = torch.nan_to_num(output)
         if no_batch:
             return output.squeeze_(0)
@@ -266,7 +266,7 @@ class CUDA_ADAPOOL2d(Function):
 
 
 
-class CUDA_ADAPOOL2d_EJVSW(Function):
+class CUDA_ADAPOOL2d_EDSCW(Function):
 
     @staticmethod
     @torch.cuda.amp.custom_fwd(cast_inputs=torch.float32)
@@ -291,14 +291,14 @@ class CUDA_ADAPOOL2d_EJVSW(Function):
         else:
             mask = input.new_zeros((1))
 
-        adapool_cuda.forward_2d_ejvsw(input.contiguous(), kernel, stride, output, return_mask, mask)
+        adapool_cuda.forward_2d_edscw(input.contiguous(), kernel, stride, output, return_mask, mask)
         ctx.save_for_backward(input)
         ctx.kernel = kernel
         ctx.stride = stride
         if return_mask:
             mask_ = mask.detach().clone()
             mask_.requires_grad = False
-            CUDA_ADAPOOL2d_EJVSW.mask = mask_
+            CUDA_ADAPOOL2d_EDSCW.mask = mask_
         output = torch.nan_to_num(output)
         if no_batch:
             return output.squeeze_(0)
@@ -311,7 +311,7 @@ class CUDA_ADAPOOL2d_EJVSW(Function):
         grad_input = torch.zeros_like(ctx.saved_tensors[0])
 
         saved = [grad_output] + list(ctx.saved_tensors) + [ctx.kernel, ctx.stride, grad_input]
-        adapool_cuda.backward_2d_ejvsw(*saved)
+        adapool_cuda.backward_2d_edscw(*saved)
 
         return torch.nan_to_num(saved[-1]), None, None, None
 
@@ -348,7 +348,7 @@ class CUDA_IDWPOOL2d(Function):
         if return_mask:
             mask_ = mask.detach().clone()
             mask_.requires_grad = False
-            CUDA_ADAPOOL2d_EJVSW.mask = mask_
+            CUDA_ADAPOOL2d_EDSCW.mask = mask_
         output = torch.nan_to_num(output)
         if no_batch:
             return output.squeeze_(0)
@@ -476,7 +476,7 @@ class CUDA_ADAPOOL3d(Function):
 
 
 
-class CUDA_ADAPOOL3d_EJVSW(Function):
+class CUDA_ADAPOOL3d_EDSCW(Function):
 
     @staticmethod
     @torch.cuda.amp.custom_fwd(cast_inputs=torch.float32)
@@ -502,14 +502,14 @@ class CUDA_ADAPOOL3d_EJVSW(Function):
         else:
             mask = input.new_zeros((1))
 
-        adapool_cuda.forward_3d_ejvsw(input.contiguous(), kernel, stride, output, return_mask, mask)
+        adapool_cuda.forward_3d_edscw(input.contiguous(), kernel, stride, output, return_mask, mask)
         ctx.save_for_backward(input)
         ctx.kernel = kernel
         ctx.stride = stride
         if return_mask:
             mask_ = mask.detach().clone()
             mask_.requires_grad = False
-            CUDA_ADAPOOL3d_EJVSW.mask = mask_
+            CUDA_ADAPOOL3d_EDSCW.mask = mask_
         output = torch.nan_to_num(output)
         if no_batch:
             return output.squeeze_(0)
@@ -522,7 +522,7 @@ class CUDA_ADAPOOL3d_EJVSW(Function):
         grad_input = torch.zeros_like(ctx.saved_tensors[0])
 
         saved = [grad_output] + list(ctx.saved_tensors) + [ctx.kernel, ctx.stride, grad_input]
-        adapool_cuda.backward_3d_ejvsw(*saved)
+        adapool_cuda.backward_3d_edscw(*saved)
 
         return torch.nan_to_num(saved[-1]), None, None, None
 
@@ -560,7 +560,7 @@ class CUDA_IDWPOOL3d(Function):
         if return_mask:
             mask_ = mask.detach().clone()
             mask_.requires_grad = False
-            CUDA_ADAPOOL3d_EJVSW.mask = mask_
+            CUDA_ADAPOOL3d_EDSCW.mask = mask_
         output = torch.nan_to_num(output)
         if no_batch:
             return output.squeeze_(0)
@@ -643,7 +643,7 @@ class CUDA_ADAPOOL3d_EM(Function):
                   strides become equal to the `kernel_size` tuple. Defaults to `None`.
         - return_mask: Bool, for returning the computed regional mask used for pooling.
         - native: Bool, for using the singl-native adapool operation or using a combination of `EM` and
-                  `EJVSW` pooling. Currently only non-native implementation is supported by CUDA-compatible
+                  `EDSCW` pooling. Currently only non-native implementation is supported by CUDA-compatible
                   GPUs. This is due to hardware constraints based on the threads per block. Defaults to `False`.
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
@@ -663,7 +663,7 @@ def adapool1d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
     if not native:
-        x = beta*CUDA_ADAPOOL1d_EJVSW.apply(x, kernel_size, stride, return_mask) + (1.-beta)*CUDA_ADAPOOL1d_EM.apply(x, kernel_size, stride, return_mask)
+        x = beta*CUDA_ADAPOOL1d_EDSCW.apply(x, kernel_size, stride, return_mask) + (1.-beta)*CUDA_ADAPOOL1d_EM.apply(x, kernel_size, stride, return_mask)
     else:
         x = CUDA_ADAPOOL1d.apply(x, beta, kernel_size, stride, return_mask)
 
@@ -672,7 +672,7 @@ def adapool1d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
         return torch.nan_to_num(x)
     else:
         if not native:
-            return torch.nan_to_num(x), (CUDA_ADAPOOL1d_EJVSW.mask,CUDA_ADAPOOL1d_EM.mask,beta)
+            return torch.nan_to_num(x), (CUDA_ADAPOOL1d_EDSCW.mask,CUDA_ADAPOOL1d_EM.mask,beta)
         else:
             return torch.nan_to_num(x), CUDA_ADAPOOL1d.mask
 '''
@@ -694,7 +694,7 @@ def adapool1d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
                   strides become equal to the `kernel_size` tuple. Defaults to `None`.
         - return_mask: Bool, for returning the computed regional mask used for pooling.
         - native: Bool, for using the singl-native adapool operation or using a combination of `EM` and
-                  `EJVSW` pooling. Currently only non-native implementation is supported by CUDA-compatible
+                  `EDSCW` pooling. Currently only non-native implementation is supported by CUDA-compatible
                   GPUs. This is due to hardware constraints based on the threads per block. Defaults to `False`.
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
@@ -715,7 +715,7 @@ def adapool2d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
     if not native:
-        x = beta*CUDA_ADAPOOL2d_EJVSW.apply(x, kernel_size, stride, return_mask) + (1.-beta)*CUDA_ADAPOOL2d_EM.apply(x, kernel_size, stride, return_mask)
+        x = beta*CUDA_ADAPOOL2d_EDSCW.apply(x, kernel_size, stride, return_mask) + (1.-beta)*CUDA_ADAPOOL2d_EM.apply(x, kernel_size, stride, return_mask)
     else:
         x = CUDA_ADAPOOL2d.apply(x, beta, kernel_size, stride, return_mask)
 
@@ -724,7 +724,7 @@ def adapool2d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
         return torch.nan_to_num(x)
     else:
         if not native:
-            return torch.nan_to_num(x), (CUDA_ADAPOOL2d_EJVSW.mask,CUDA_ADAPOOL2d_EM.mask,beta)
+            return torch.nan_to_num(x), (CUDA_ADAPOOL2d_EDSCW.mask,CUDA_ADAPOOL2d_EM.mask,beta)
         else:
             return torch.nan_to_num(x), CUDA_ADAPOOL2d.mask
 '''
@@ -746,7 +746,7 @@ def adapool2d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
                   strides become equal to the `kernel_size` tuple. Defaults to `None`.
         - return_mask: Bool, for returning the computed regional mask used for pooling.
         - native: Bool, for using the singl-native adapool operation or using a combination of `EM` and
-                  `EJVSW` pooling. Currently only non-native implementation is supported by CUDA-compatible
+                  `EDSCW` pooling. Currently only non-native implementation is supported by CUDA-compatible
                   GPUs. This is due to hardware constraints based on the threads per block. Defaults to `False`.
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
@@ -768,7 +768,7 @@ def adapool3d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
     if not native:
-        x = beta*CUDA_ADAPOOL3d_EJVSW.apply(x, kernel_size, stride, return_mask) + (1. - beta)*CUDA_ADAPOOL3d_EM.apply(x, kernel_size, stride, return_mask)
+        x = beta*CUDA_ADAPOOL3d_EDSCW.apply(x, kernel_size, stride, return_mask) + (1. - beta)*CUDA_ADAPOOL3d_EM.apply(x, kernel_size, stride, return_mask)
     else:
         x = CUDA_ADAPOOL3d.apply(x, beta, kernel_size, stride, return_mask)
 
@@ -777,7 +777,7 @@ def adapool3d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
         return torch.nan_to_num(x)
     else:
         if not native:
-            return torch.nan_to_num(x), (CUDA_ADAPOOL3d_EJVSW.mask,CUDA_ADAPOOL3d_EM.mask,beta)
+            return torch.nan_to_num(x), (CUDA_ADAPOOL3d_EDSCW.mask,CUDA_ADAPOOL3d_EM.mask,beta)
         else:
             return torch.nan_to_num(x), CUDA_ADAPOOL3d.mask
 '''
@@ -799,7 +799,7 @@ def adapool3d(x, beta=None, kernel_size=2, stride=None, return_mask=False, nativ
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
 '''
-def ejvswpool1d(x, kernel_size=2, stride=None, return_mask=False):
+def edscwpool1d(x, kernel_size=2, stride=None, return_mask=False):
     if stride is None:
         stride = kernel_size
     kernel_size = _single(kernel_size)
@@ -807,13 +807,13 @@ def ejvswpool1d(x, kernel_size=2, stride=None, return_mask=False):
 
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
-    x = CUDA_ADAPOOL1d_EJVSW.apply(x, kernel_size, stride, return_mask)
+    x = CUDA_ADAPOOL1d_EDSCW.apply(x, kernel_size, stride, return_mask)
 
     # Replace `NaN's
     if not return_mask:
         return torch.nan_to_num(x)
     else:
-        return torch.nan_to_num(x), CUDA_ADAPOOL1d_EJVSW.mask
+        return torch.nan_to_num(x), CUDA_ADAPOOL1d_EDSCW.mask
 '''
 ---  E N D  O F  F U N C T I O N  E J V S W P O O L 1 D ---
 '''
@@ -901,7 +901,7 @@ def idwpool1d(x, kernel_size=2, stride=None, return_mask=False):
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
 '''
-def ejvswpool2d(x, kernel_size=2, stride=None, return_mask=False):
+def edscwpool2d(x, kernel_size=2, stride=None, return_mask=False):
     if stride is None:
         stride = kernel_size
     kernel_size = _pair(kernel_size)
@@ -909,13 +909,13 @@ def ejvswpool2d(x, kernel_size=2, stride=None, return_mask=False):
 
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
-    x = CUDA_ADAPOOL2d_EJVSW.apply(x, kernel_size, stride, return_mask)
+    x = CUDA_ADAPOOL2d_EDSCW.apply(x, kernel_size, stride, return_mask)
 
     # Replace `NaN's
     if not return_mask:
         return torch.nan_to_num(x)
     else:
-        return torch.nan_to_num(x), CUDA_ADAPOOL2d_EJVSW.mask
+        return torch.nan_to_num(x), CUDA_ADAPOOL2d_EDSCW.mask
 '''
 ---  E N D  O F  F U N C T I O N  E J V S W P O O L 2 D ---
 '''
@@ -1003,7 +1003,7 @@ def idwpool2d(x, kernel_size=2, stride=None, return_mask=False):
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
 '''
-def ejvswpool3d(x, kernel_size=2, stride=None, return_mask=False):
+def edscwpool3d(x, kernel_size=2, stride=None, return_mask=False):
     if stride is None:
         stride = kernel_size
     kernel_size = _triple(kernel_size)
@@ -1011,13 +1011,13 @@ def ejvswpool3d(x, kernel_size=2, stride=None, return_mask=False):
 
     assert x.is_cuda, 'Only CUDA implementation supported!'
 
-    x = CUDA_ADAPOOL3d_EJVSW.apply(x, kernel_size, stride, return_mask)
+    x = CUDA_ADAPOOL3d_EDSCW.apply(x, kernel_size, stride, return_mask)
 
     # Replace `NaN's
     if not return_mask:
         return torch.nan_to_num(x)
     else:
-        return torch.nan_to_num(x), CUDA_ADAPOOL3d_EJVSW.mask
+        return torch.nan_to_num(x), CUDA_ADAPOOL3d_EDSCW.mask
 '''
 ---  E N D  O F  F U N C T I O N  E J V S W P O O L 3 D ---
 '''
@@ -1108,21 +1108,20 @@ def adaunpool(x, mask=None, interpolate=True):
     assert mask is not None, 'Function called with `None`/undefined `mask` parameter.'
     if interpolate:
         if isinstance(mask, tuple):
-            mask_ejvsw = torch.clamp(mask[0], 0., 1.)
+            mask_edscw = torch.clamp(mask[0], 0., 1.)
             mask_em = torch.clamp(mask[1], 0., 1.)
             x1 = F.interpolate(x*mask[2], size=mask[0].shape[1:], mode='area').transpose(0,1)
-            x2 = F.interpolate(x*(1.-mask[2]), size=mask[1].shape[1:], mode='nearest').transpose(0,1)
-            return (x1*mask_ejvsw.unsqueeze(0) + x2*mask_em.unsqueeze(0)).transpose(0,1)
+            x2 = F.interpolate(x*(1.-mask[2]), size=mask[1].shape[1:], mode='area').transpose(0,1)
+            return (x1*mask_edscw.unsqueeze(0) + x2*mask_em.unsqueeze(0)).transpose(0,1)
         else:
             mask = torch.clamp(mask, 0., 1.)
-            x1 = F.interpolate(x, size=mask.shape[1:], mode='area').transpose(0,1)
-            x2 = F.interpolate(x, size=mask.shape[1:], mode='nearest').transpose(0,1)
-            return (x1*mask.unsqueeze(0) + x2*(1.- mask.unsqueeze(0))).transpose(0,1)
+            x = F.interpolate(x, size=mask.shape[1:], mode='area').transpose(0,1)
+            return (x*mask.unsqueeze(0) + x*(1.- mask.unsqueeze(0))).transpose(0,1)
     else:
         if isinstance(mask, tuple):
-            mask_ejvsw = torch.clamp(mask[0], 0., 1.)
+            mask_edscw = torch.clamp(mask[0], 0., 1.)
             mask_em = torch.clamp(mask[1], 0., 1.)
-            return (x.transpose(0,1)*mask_ejvsw.unsqueeze(0) + x.transpose(0,1)*mask_em.unsqueeze(0)).transpose(0,1)
+            return (x.transpose(0,1)*mask_edscw.unsqueeze(0) + x.transpose(0,1)*mask_em.unsqueeze(0)).transpose(0,1)
         else:
              mask = torch.clamp(mask, 0., 1.)
              return (x.transpose(0,1)*mask.unsqueeze(0) + x.transpose(0,1)*(1.- mask.unsqueeze(0))).transpose(0,1)
@@ -1149,7 +1148,7 @@ def adaunpool(x, mask=None, interpolate=True):
         - device: String, for the CUDA device(s) to hold the data. Defaults to `None`
         - dtype: Data type object to be used when initializing `beta`. Defaults to `None`.
         - native: Bool, for using the singl-native adapool operation or using a combination of `EM` and
-                  `EJVSW` pooling. Currently only non-native implementation is supported by CUDA-compatible
+                  `EDSCW` pooling. Currently only non-native implementation is supported by CUDA-compatible
                   GPUs. This is due to hardware constraints based on the threads per block. Defaults to `False`.
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
@@ -1207,9 +1206,9 @@ class AdaPool1d(torch.nn.Module):
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
 '''
-class EJVSWPool1d(torch.nn.Module):
+class EDSCWPool1d(torch.nn.Module):
     def __init__(self, kernel_size=2, stride=None, return_mask=False):
-        super(EJVSWPool1d, self).__init__()
+        super(EDSCWPool1d, self).__init__()
         if stride is None:
             stride = kernel_size
         self.kernel_size = _single(kernel_size)
@@ -1218,7 +1217,7 @@ class EJVSWPool1d(torch.nn.Module):
 
 
     def forward(self, x):
-        return ejvswpool1d(x, kernel_size=self.kernel_size, stride=self.stride, return_mask=self.return_mask)
+        return edscwpool1d(x, kernel_size=self.kernel_size, stride=self.stride, return_mask=self.return_mask)
 '''
 ===  E N D  O F  C L A S S  E J V S W P O O L 1 D ===
 '''
@@ -1304,7 +1303,7 @@ class IDWPool1d(torch.nn.Module):
         - device: String, for the CUDA device(s) to hold the data. Defaults to `None`
         - dtype: Data type object to be used when initializing `beta`. Defaults to `None`.
         - native: Bool, for using the singl-native adapool operation or using a combination of `EM` and
-                  `EJVSW` pooling. Currently only non-native implementation is supported by CUDA-compatible
+                  `EDSCW` pooling. Currently only non-native implementation is supported by CUDA-compatible
                   GPUs. This is due to hardware constraints based on the threads per block. Defaults to `False`.
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
@@ -1360,9 +1359,9 @@ class AdaPool2d(torch.nn.Module):
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
 '''
-class EJVSWPool2d(torch.nn.Module):
+class EDSCWPool2d(torch.nn.Module):
     def __init__(self, kernel_size=2, stride=None,return_mask=False):
-        super(EJVSWPool2d, self).__init__()
+        super(EDSCWPool2d, self).__init__()
         if stride is None:
             stride = kernel_size
         self.kernel_size = _pair(kernel_size)
@@ -1371,7 +1370,7 @@ class EJVSWPool2d(torch.nn.Module):
 
 
     def forward(self, x):
-        return ejvswpool2d(x, kernel_size=self.kernel_size, stride=self.stride, return_mask=self.return_mask)
+        return edscwpool2d(x, kernel_size=self.kernel_size, stride=self.stride, return_mask=self.return_mask)
 '''
 ===  E N D  O F  C L A S S  E J V S W P O O L 2 D ===
 '''
@@ -1457,7 +1456,7 @@ class IDWPool2d(torch.nn.Module):
         - device: String, for the CUDA device(s) to hold the data. Defaults to `None`
         - dtype: Data type object to be used when initializing `beta`. Defaults to `None`.
         - native: Bool, for using the singl-native adapool operation or using a combination of `EM` and
-                  `EJVSW` pooling. Currently only non-native implementation is supported by CUDA-compatible
+                  `EDSCW` pooling. Currently only non-native implementation is supported by CUDA-compatible
                   GPUs. This is due to hardware constraints based on the threads per block. Defaults to `False`.
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
@@ -1508,9 +1507,9 @@ class AdaPool3d(torch.nn.Module):
     [Returns]
          - PyTorch Tensor, subsampled based on the specified `kernel_size` and `stride`
 '''
-class EJVSWPool3d(torch.nn.Module):
+class EDSCWPool3d(torch.nn.Module):
     def __init__(self, kernel_size=2, stride=None, return_mask=False):
-        super(EJVSWPool3d, self).__init__()
+        super(EDSCWPool3d, self).__init__()
         if stride is None:
             stride = kernel_size
         self.kernel_size = _triple(kernel_size)
@@ -1519,7 +1518,7 @@ class EJVSWPool3d(torch.nn.Module):
 
 
     def forward(self, x):
-        return ejvswpool3d(x, kernel_size=self.kernel_size, stride=self.stride, return_mask=self.return_mask)
+        return edscwpool3d(x, kernel_size=self.kernel_size, stride=self.stride, return_mask=self.return_mask)
 '''
 ===  E N D  O F  C L A S S  E J V S W P O O L 3 D ===
 '''

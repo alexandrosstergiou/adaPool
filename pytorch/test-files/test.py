@@ -1,6 +1,6 @@
 import torch
 import adapool_cuda
-from adaPool import adapool1d, adapool2d, adapool3d, AdaPool1d, AdaPool2d, AdaPool3d, adaunpool, EJVSWPool1d, EJVSWPool2d, EJVSWPool3d, EMPool1d, EMPool2d, EMPool3d
+from adaPool import adapool1d, adapool2d, adapool3d, AdaPool1d, AdaPool2d, AdaPool3d, adaunpool, EDSCWPool1d, EDSCWPool2d, EDSCWPool3d, EMPool1d, EMPool2d, EMPool3d
 
 import timeit
 import traceback
@@ -37,7 +37,7 @@ try:
     p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=beta_1d)
     pool_1d = p_1d(x_1d)
 
-    p_1d = EJVSWPool1d()
+    p_1d = EDSCWPool1d()
     pool_1d = p_1d(x_1d)
 
     p_1d = EMPool1d()
@@ -54,7 +54,7 @@ try:
     p_2d = AdaPool2d(dtype=x_2d.dtype,device=x_2d.get_device(),beta=beta_2d)
     pool_2d = p_2d(x_2d)
 
-    p_2d = EJVSWPool2d()
+    p_2d = EDSCWPool2d()
     pool_2d = p_2d(x_2d)
 
     p_2d = EMPool2d()
@@ -70,7 +70,7 @@ try:
     p_3d = AdaPool3d(dtype=x_3d.dtype,device=x_3d.get_device(),beta=beta_3d)
     pool_3d = p_3d(x_3d)
 
-    p_3d = EJVSWPool3d()
+    p_3d = EDSCWPool3d()
     pool_3d = p_3d(x_3d)
 
     p_3d = EMPool3d()
@@ -95,7 +95,7 @@ try:
     p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=beta_1d)
     p_1d(x_1d).pow(2).mean().backward()
 
-    p_1d = EJVSWPool1d()
+    p_1d = EDSCWPool1d()
     p_1d(x_1d).pow(2).mean().backward()
 
     p_1d = EMPool1d()
@@ -112,7 +112,7 @@ try:
     p_2d = AdaPool2d(dtype=x_2d.dtype,device=x_2d.get_device(),beta=beta_2d)
     p_2d(x_2d).pow(2).mean().backward()
 
-    p_2d = EJVSWPool2d()
+    p_2d = EDSCWPool2d()
     p_2d(x_2d).pow(2).mean().backward()
 
     p_2d = EMPool2d()
@@ -128,7 +128,7 @@ try:
     p_3d = AdaPool3d(dtype=x_3d.dtype,device=x_3d.get_device(),beta=beta_3d)
     p_3d(x_3d).pow(2).mean().backward()
 
-    p_3d = EJVSWPool3d()
+    p_3d = EDSCWPool3d()
     p_3d(x_3d).pow(2).mean().backward()
 
     p_3d = EMPool3d()
@@ -164,7 +164,7 @@ try:
     p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=beta_1d)
     pool_1d = p_1d(x_1d)
 
-    p_1d = EJVSWPool1d()
+    p_1d = EDSCWPool1d()
     pool_1d = p_1d(x_1d)
 
     p_1d = EMPool1d()
@@ -180,7 +180,7 @@ try:
     p_2d = AdaPool2d(dtype=x_2d.dtype,device=x_2d.get_device(),beta=beta_2d)
     pool_2d = p_2d(x_2d)
 
-    p_2d = EJVSWPool2d()
+    p_2d = EDSCWPool2d()
     pool_2d = p_2d(x_2d)
 
     p_2d = EMPool2d()
@@ -196,7 +196,7 @@ try:
     p_3d = AdaPool3d(dtype=x_3d.dtype,device=x_3d.get_device(),beta=beta_3d)
     pool_3d = p_3d(x_3d)
 
-    p_3d = EJVSWPool3d()
+    p_3d = EDSCWPool3d()
     pool_3d = p_3d(x_3d)
 
     p_3d = EMPool3d()
@@ -220,7 +220,7 @@ try:
     p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=beta_1d)
     p_1d(x_1d).pow(2).mean().backward()
 
-    p_1d = EJVSWPool1d()
+    p_1d = EDSCWPool1d()
     p_1d(x_1d).pow(2).mean().backward()
 
     p_1d = EMPool1d()
@@ -237,7 +237,7 @@ try:
     p_2d = AdaPool2d(dtype=x_2d.dtype,device=x_2d.get_device(),beta=beta_2d)
     p_2d(x_2d).pow(2).mean().backward()
 
-    p_2d = EJVSWPool2d()
+    p_2d = EDSCWPool2d()
     p_2d(x_2d).pow(2).mean().backward()
 
     p_2d = EMPool2d()
@@ -254,7 +254,7 @@ try:
     p_3d = AdaPool3d(dtype=x_3d.dtype,device=x_3d.get_device(),beta=beta_3d)
     p_3d(x_3d).pow(2).mean().backward()
 
-    p_3d = EJVSWPool3d()
+    p_3d = EDSCWPool3d()
     p_3d(x_3d).pow(2).mean().backward()
 
     p_3d = EMPool3d()
@@ -290,7 +290,7 @@ try:
     p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=beta_1d)
     pool_1d = p_1d(x_1d)
 
-    p_1d = EJVSWPool1d()
+    p_1d = EDSCWPool1d()
     pool_1d = p_1d(x_1d)
 
     p_1d = EMPool1d()
@@ -306,7 +306,7 @@ try:
     p_2d = AdaPool2d(dtype=x_2d.dtype,device=x_2d.get_device(),beta=beta_2d)
     pool_2d = p_2d(x_2d)
 
-    p_2d = EJVSWPool2d()
+    p_2d = EDSCWPool2d()
     pool_2d = p_2d(x_2d)
 
     p_2d = EMPool2d()
@@ -323,7 +323,7 @@ try:
     p_3d = AdaPool3d(dtype=x_3d.dtype,device=x_3d.get_device(),beta=beta_3d)
     pool_3d = p_3d(x_3d)
 
-    p_3d = EJVSWPool3d()
+    p_3d = EDSCWPool3d()
     pool_3d = p_3d(x_3d)
 
     p_3d = EMPool3d()
@@ -347,7 +347,7 @@ try:
     p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=beta_1d)
     p_1d(x_1d).pow(2).mean().backward()
 
-    p_1d = EJVSWPool1d()
+    p_1d = EDSCWPool1d()
     p_1d(x_1d).pow(2).mean().backward()
 
     p_1d = EMPool1d()
@@ -364,7 +364,7 @@ try:
     p_2d = AdaPool2d(dtype=x_2d.dtype,device=x_2d.get_device(),beta=beta_2d)
     p_2d(x_2d).pow(2).mean().backward()
 
-    p_2d = EJVSWPool2d()
+    p_2d = EDSCWPool2d()
     p_2d(x_2d).pow(2).mean().backward()
 
     p_2d = EMPool2d()
@@ -381,7 +381,7 @@ try:
     p_3d = AdaPool3d(dtype=x_3d.dtype,device=x_3d.get_device(),beta=beta_3d)
     p_3d(x_3d).pow(2).mean().backward()
 
-    p_3d = EJVSWPool3d()
+    p_3d = EDSCWPool3d()
     p_3d(x_3d).pow(2).mean().backward()
 
     p_3d = EMPool3d()
@@ -524,55 +524,55 @@ time_b_3d_cuda = ' '.join(str(prof).split('\n')[-3:])
 
 
 
-p_1d = EJVSWPool1d()
-p_2d = EJVSWPool2d()
-p_3d = EJVSWPool3d()
+p_1d = EDSCWPool1d()
+p_2d = EDSCWPool2d()
+p_3d = EDSCWPool3d()
 
 with torch.autograd.profiler.profile(use_cuda=True) as prof:
     for i in range(100):
         p_1d(x_1d)
-print('\033[38;2;199;246;236m' +'EJVSWPool1d [foward]'+ '\033[0m')
+print('\033[38;2;199;246;236m' +'EDSCWPool1d [foward]'+ '\033[0m')
 print(prof.key_averages())
-time_f_1d_cuda_EJVSW = ''.join(str(prof).split('\n')[-3:])
+time_f_1d_cuda_EDSCW = ''.join(str(prof).split('\n')[-3:])
 _tt = p_1d(x_1d)
 with torch.autograd.profiler.profile(use_cuda=True) as prof:
     for i in range(100):
         tmp = p_1d(x_1d)
         tmp.backward(tmp,retain_graph=True)
-print('\033[38;2;199;246;236m' +'EJVSWPool1d [forward + backward]'+ '\033[0m')
+print('\033[38;2;199;246;236m' +'EDSCWPool1d [forward + backward]'+ '\033[0m')
 print(prof.key_averages())
-time_b_1d_cuda_EJVSW = ' '.join(str(prof).split('\n')[-3:])
+time_b_1d_cuda_EDSCW = ' '.join(str(prof).split('\n')[-3:])
 
 
 with torch.autograd.profiler.profile(use_cuda=True) as prof:
     for i in range(100):
         p_2d(x_2d)
-print('\033[38;2;199;246;236m' +'EJVSWPool2d [foward]'+ '\033[0m')
-time_f_2d_cuda_EJVSW = ''.join(str(prof).split('\n')[-3:])
+print('\033[38;2;199;246;236m' +'EDSCWPool2d [foward]'+ '\033[0m')
+time_f_2d_cuda_EDSCW = ''.join(str(prof).split('\n')[-3:])
 print(prof.key_averages())
 _tt = p_2d(x_2d)
 with torch.autograd.profiler.profile(use_cuda=True) as prof:
     for i in range(100):
         tmp = p_2d(x_2d)
         tmp.backward(tmp,retain_graph=True)
-print('\033[38;2;199;246;236m' +'EJVSWPool2d [forward + backward]'+ '\033[0m')
+print('\033[38;2;199;246;236m' +'EDSCWPool2d [forward + backward]'+ '\033[0m')
 print(prof.key_averages())
-time_b_2d_cuda_EJVSW = ' '.join(str(prof).split('\n')[-3:])
+time_b_2d_cuda_EDSCW = ' '.join(str(prof).split('\n')[-3:])
 
 
 with torch.autograd.profiler.profile(use_cuda=True) as prof:
     for i in range(100):
         p_3d(x_3d)
-print('\033[38;2;199;246;236m' +'EJVSWPool3d [foward]'+ '\033[0m')
+print('\033[38;2;199;246;236m' +'EDSCWPool3d [foward]'+ '\033[0m')
 print(prof.key_averages())
-time_f_3d_cuda_EJVSW = ''.join(str(prof).split('\n')[-3:])
+time_f_3d_cuda_EDSCW = ''.join(str(prof).split('\n')[-3:])
 _tt = p_3d(x_3d)
 with torch.autograd.profiler.profile(use_cuda=True) as prof:
     for i in range(100):
         p_3d(x_3d).backward(_tt)
-print('\033[38;2;199;246;236m' +'EJVSWPool3d [forward + backward]'+ '\033[0m')
+print('\033[38;2;199;246;236m' +'EDSCWPool3d [forward + backward]'+ '\033[0m')
 print(prof.key_averages())
-time_b_3d_cuda_EJVSW = ' '.join(str(prof).split('\n')[-3:])
+time_b_3d_cuda_EDSCW = ' '.join(str(prof).split('\n')[-3:])
 
 
 
@@ -636,22 +636,22 @@ time_b_3d_cuda_em = ' '.join(str(prof).split('\n')[-3:])
 print('\n'+'\033[38;2;199;246;236m' +'-------------------------------'+ '\033[0m')
 print('\033[38;2;50;50;50;48;2;85;217;192m' +'AdaPool1d [forward + backward]'+ '\033[0m')
 print(time_b_1d_cuda, 'for 100 iterations.')
-print('\033[38;2;50;50;50;48;2;85;217;192m' +'EJVSWPool1d [forward + backward]'+ '\033[0m')
-print(time_b_1d_cuda_EJVSW, 'for 100 iterations.')
+print('\033[38;2;50;50;50;48;2;85;217;192m' +'EDSCWPool1d [forward + backward]'+ '\033[0m')
+print(time_b_1d_cuda_EDSCW, 'for 100 iterations.')
 print('\033[38;2;50;50;50;48;2;85;217;192m' +'EMPool1d [forward + backward]'+ '\033[0m')
 print(time_b_1d_cuda_em, 'for 100 iterations.')
 print('\n'+'\033[38;2;199;246;236m' +'-------------------------------'+ '\033[0m')
 print('\033[38;2;50;50;50;48;2;85;217;192m' +'AdaPool2d [forward + backward]'+ '\033[0m')
 print(time_b_2d_cuda, 'for 100 iterations.')
-print('\033[38;2;50;50;50;48;2;85;217;192m' +'EJVSWPool2d [forward + backward]'+ '\033[0m')
-print(time_b_2d_cuda_EJVSW, 'for 100 iterations.')
+print('\033[38;2;50;50;50;48;2;85;217;192m' +'EDSCWPool2d [forward + backward]'+ '\033[0m')
+print(time_b_2d_cuda_EDSCW, 'for 100 iterations.')
 print('\033[38;2;50;50;50;48;2;85;217;192m' +'EMPool2d [forward + backward]'+ '\033[0m')
 print(time_b_2d_cuda_em, 'for 100 iterations.')
 print('\n'+'\033[38;2;199;246;236m' +'-------------------------------'+ '\033[0m')
 print('\033[38;2;50;50;50;48;2;85;217;192m' +'AdaPool3d [forward + backward]'+ '\033[0m')
 print(time_b_3d_cuda, 'for 100 iterations.')
-print('\033[38;2;50;50;50;48;2;85;217;192m' +'EJVSWPool3d [forward + backward]'+ '\033[0m')
-print(time_b_3d_cuda_EJVSW, 'for 100 iterations.')
+print('\033[38;2;50;50;50;48;2;85;217;192m' +'EDSCWPool3d [forward + backward]'+ '\033[0m')
+print(time_b_3d_cuda_EDSCW, 'for 100 iterations.')
 print('\033[38;2;50;50;50;48;2;85;217;192m' +'EMPool3d [forward + backward]'+ '\033[0m')
 print(time_b_3d_cuda_em, 'for 100 iterations.')
 print('\n'+'\033[38;2;199;246;236m' +'-------------------------------'+ '\033[0m')

@@ -49,11 +49,11 @@ __device__  scalar_t l2(const scalar_t x1, const scalar_t x2) {
   return result;
 }
 
-// Jaccard Vector Similarity
+// DSC
 template <typename scalar_t>
-__device__  scalar_t jvs(const scalar_t x1, const scalar_t x2) {
+__device__  scalar_t dsc(const scalar_t x1, const scalar_t x2) {
   //const scalar_t result = (x1*x2)/(sqrt(pow(x1,2))+sqrt(pow(x2,2)));
-  const scalar_t result = (2*x1*x2)/((x1*x1)+(x2*x2));
+  const scalar_t result = (2*abs(x1*x2))/(x1*x1+x2*x2);
   return result;
 }
 
@@ -105,7 +105,7 @@ __global__ void AdaPool1dForward(const int nthreads,
         if(d_offset >= dim || d_offset < 0)continue;
         const int offset = d_offset;
 
-        scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+        scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
         mask_sum_avg += exp(dist);
         mask_sum_max += exp(offset_bottom_input[offset]);
@@ -120,7 +120,7 @@ __global__ void AdaPool1dForward(const int nthreads,
         if(d_offset >= dim || d_offset < 0)continue;
         const int offset = d_offset;
 
-        scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+        scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
         scalar_t mask_ = b * exp(dist)/mask_sum_avg + (1. - b) * exp(offset_bottom_input[offset])/ mask_sum_max;
         mask_ = clamp(mask_, zero, upper);
@@ -195,7 +195,7 @@ __global__ void AdaPool2dForward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
           const int offset = y_offset*width + x_offset;
 
-          scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+          scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
           mask_sum_avg += exp(dist);
           mask_sum_max += exp(offset_bottom_input[offset]);
@@ -217,7 +217,7 @@ __global__ void AdaPool2dForward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
           const int offset = y_offset*width + x_offset;
 
-          scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+          scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
           scalar_t mask_ = b * exp(dist)/  mask_sum_avg + (1. - b) * exp(offset_bottom_input[offset])/  mask_sum_max;
           mask_ = clamp(mask_, zero, upper);
@@ -306,7 +306,7 @@ __global__ void AdaPool3dForward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
             const int offset = d_offset*height + y_offset*width + x_offset;
 
-            scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+            scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
             mask_sum_avg += exp(dist);
             mask_sum_max += exp(offset_bottom_input[offset]);
@@ -332,7 +332,7 @@ __global__ void AdaPool3dForward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
             const int offset = d_offset*height + y_offset*width + x_offset;
 
-            scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+            scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
 
             scalar_t mask_ = b * exp(dist)/mask_sum_avg + (1. - b) * exp(offset_bottom_input[offset])/mask_sum_max;
@@ -506,7 +506,7 @@ __global__ void AdaPool1dBackward(const int nthreads,
         if(d_offset >= dim || d_offset < 0)continue;
         const int offset = d_offset;
 
-        scalar_t dist = jvs(offset_data_input[offset], act_avg);
+        scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
         mask_sum_avg += exp(dist);
         mask_sum_max += exp(offset_data_input[offset]);
@@ -522,7 +522,7 @@ __global__ void AdaPool1dBackward(const int nthreads,
         if(d_offset >= dim || d_offset < 0)continue;
           const int offset = d_offset;
 
-          scalar_t dist = jvs(offset_data_input[offset], act_avg);
+          scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
           scalar_t mask = b * exp(dist)/mask_sum_avg + (1. - b) * exp(offset_data_input[offset])/mask_sum_max;
           mask = clamp(mask, zero, upper);
@@ -601,7 +601,7 @@ __global__ void AdaPool2dBackward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
           const int offset = y_offset*width + x_offset;
 
-          scalar_t dist = jvs(offset_data_input[offset], act_avg);
+          scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
           mask_sum_avg += exp(dist);
           mask_sum_max += exp(offset_data_input[offset]);
@@ -622,7 +622,7 @@ __global__ void AdaPool2dBackward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
             const int offset = y_offset*width + x_offset;
 
-            scalar_t dist = jvs(offset_data_input[offset], act_avg);
+            scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
             scalar_t mask = b * exp(dist)/mask_sum_avg + (1. - b) * exp(offset_data_input[offset])/mask_sum_max;
             mask = clamp(mask, zero, upper);
@@ -715,7 +715,7 @@ __global__ void AdaPool3dBackward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
               const int offset = d_offset*height + y_offset*width + x_offset;
 
-              scalar_t dist = jvs(offset_data_input[offset], act_avg);
+              scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
               mask_sum_avg += exp(dist);
               mask_sum_max += exp(offset_data_input[offset]);
@@ -741,7 +741,7 @@ __global__ void AdaPool3dBackward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
               const int offset = d_offset*height + y_offset*width + x_offset;
 
-              scalar_t dist = jvs(offset_data_input[offset], act_avg);
+              scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
               scalar_t mask = b * exp(dist)/mask_sum_avg + (1. - b) * exp(offset_data_input[offset])/mask_sum_max;
               mask = clamp(mask, zero, upper);
@@ -880,7 +880,7 @@ int AdaPool3dBackwardLauncher(const at::Tensor output_grad, const at::Tensor inp
 
 
 template <typename scalar_t>
-__global__ void Ada_EJVSW_Pool1dForward(const int nthreads,
+__global__ void Ada_EDSCW_Pool1dForward(const int nthreads,
                                        const scalar_t *bottom_input, const int batches,
                                        const int channels, const int dim,
                                        const int kernel_d, const int stride_d,
@@ -922,7 +922,7 @@ __global__ void Ada_EJVSW_Pool1dForward(const int nthreads,
         if(d_offset >= dim || d_offset < 0)continue;
         const int offset = d_offset;
 
-        scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+        scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
         mask_sum_avg += exp(dist);
 
@@ -937,7 +937,7 @@ __global__ void Ada_EJVSW_Pool1dForward(const int nthreads,
         if(d_offset >= dim || d_offset < 0)continue;
         const int offset = d_offset;
 
-        scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+        scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
         scalar_t mask_ = exp(dist)/mask_sum_avg;
 
@@ -951,7 +951,7 @@ __global__ void Ada_EJVSW_Pool1dForward(const int nthreads,
 
 
 template <typename scalar_t>
-__global__ void Ada_EJVSW_Pool2dForward(const int nthreads,
+__global__ void Ada_EDSCW_Pool2dForward(const int nthreads,
                                        const scalar_t *bottom_input, const int batches,
                                        const int channels, const int height,
                                        const int width, const int kernel_h,
@@ -1006,7 +1006,7 @@ __global__ void Ada_EJVSW_Pool2dForward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
           const int offset = y_offset*width + x_offset;
 
-          scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+          scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
           mask_sum_avg += exp(dist);
 
@@ -1026,7 +1026,7 @@ __global__ void Ada_EJVSW_Pool2dForward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
           const int offset = y_offset*width + x_offset;
 
-          scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+          scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
           scalar_t mask_ = exp(dist)/mask_sum_avg;
 
@@ -1041,7 +1041,7 @@ __global__ void Ada_EJVSW_Pool2dForward(const int nthreads,
 
 
 template <typename scalar_t>
-__global__ void Ada_EJVSW_Pool3dForward(const int nthreads,
+__global__ void Ada_EDSCW_Pool3dForward(const int nthreads,
                                        const scalar_t *bottom_input, const int batches,
                                        const int channels, const int depth,
                                        const int height, const int width,
@@ -1110,7 +1110,7 @@ __global__ void Ada_EJVSW_Pool3dForward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
             const int offset = d_offset*height + y_offset*width + x_offset;
 
-            scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+            scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
             mask_sum_avg += exp(dist);
 
@@ -1134,7 +1134,7 @@ __global__ void Ada_EJVSW_Pool3dForward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
             const int offset = d_offset*height + y_offset*width + x_offset;
 
-            scalar_t dist = jvs(offset_bottom_input[offset], act_avg);
+            scalar_t dist = dsc(offset_bottom_input[offset], act_avg);
 
             scalar_t mask_ = exp(dist)/mask_sum_avg;
 
@@ -1150,19 +1150,19 @@ __global__ void Ada_EJVSW_Pool3dForward(const int nthreads,
 }
 
 
-int Ada_EJVSW_Pool1dForwardLauncher(const at::Tensor input, const int batches,
+int Ada_EDSCW_Pool1dForwardLauncher(const at::Tensor input, const int batches,
                                    const int channels, const int dim,
                                    const int kernel_d, const int stride_d,
                                    at::Tensor output, const bool return_mask,
                                    at::Tensor mask){
     const int output_size = batches * dim/stride_d * channels;
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(
-        input.scalar_type(), "Ada_EJVSW_Pool1dLauncherForward", ([&] {
+        input.scalar_type(), "Ada_EDSCW_Pool1dLauncherForward", ([&] {
         const scalar_t *bottom_input = input.data_ptr<scalar_t>();
         scalar_t *output_data = output.data_ptr<scalar_t>();
         scalar_t *mask_data = mask.data_ptr<scalar_t>();
 
-        Ada_EJVSW_Pool1dForward<scalar_t>
+        Ada_EDSCW_Pool1dForward<scalar_t>
         <<<GET_BLOCKS(output_size), THREADS_PER_BLOCK>>>(
           output_size, bottom_input,
           batches, channels,
@@ -1180,7 +1180,7 @@ int Ada_EJVSW_Pool1dForwardLauncher(const at::Tensor input, const int batches,
   return 1;
 }
 
-int Ada_EJVSW_Pool2dForwardLauncher(const at::Tensor input, const int batches,
+int Ada_EDSCW_Pool2dForwardLauncher(const at::Tensor input, const int batches,
                                    const int channels, const int height,
                                    const int width, const int kernel_h,
                                    const int kernel_w, const int stride_h,
@@ -1188,12 +1188,12 @@ int Ada_EJVSW_Pool2dForwardLauncher(const at::Tensor input, const int batches,
                                    const bool return_mask, at::Tensor mask){
     const int output_size = batches * height/stride_h * width/stride_w * channels;
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(
-        input.scalar_type(), "Ada_EJVSW_Pool2dLauncherForward", ([&] {
+        input.scalar_type(), "Ada_EDSCW_Pool2dLauncherForward", ([&] {
         const scalar_t *bottom_input = input.data_ptr<scalar_t>();
         scalar_t *output_data = output.data_ptr<scalar_t>();
         scalar_t *mask_data = mask.data_ptr<scalar_t>();
 
-        Ada_EJVSW_Pool2dForward<scalar_t>
+        Ada_EDSCW_Pool2dForward<scalar_t>
         <<<GET_BLOCKS(output_size), THREADS_PER_BLOCK>>>(
           output_size, bottom_input,
           batches, channels,
@@ -1213,7 +1213,7 @@ int Ada_EJVSW_Pool2dForwardLauncher(const at::Tensor input, const int batches,
   return 1;
 }
 
-int Ada_EJVSW_Pool3dForwardLauncher(const at::Tensor input,  const int batches,
+int Ada_EDSCW_Pool3dForwardLauncher(const at::Tensor input,  const int batches,
                                    const int channels, const int depth,
                                    const int height, const int width,
                                    const int kernel_d, const int kernel_h,
@@ -1223,13 +1223,13 @@ int Ada_EJVSW_Pool3dForwardLauncher(const at::Tensor input,  const int batches,
                                    at::Tensor mask){
     const int output_size = batches * depth/stride_d * height/stride_h * width/stride_w * channels;
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(
-        input.scalar_type(), "Ada_EJVSW_Pool3dLauncherForward", ([&] {
+        input.scalar_type(), "Ada_EDSCW_Pool3dLauncherForward", ([&] {
         const scalar_t *bottom_input = input.data_ptr<scalar_t>();
         scalar_t *output_data = output.data_ptr<scalar_t>();
         scalar_t *mask_data = mask.data_ptr<scalar_t>();
 
 
-        Ada_EJVSW_Pool3dForward<scalar_t>
+        Ada_EDSCW_Pool3dForward<scalar_t>
         <<<GET_BLOCKS(output_size), THREADS_PER_BLOCK>>>(
           output_size, bottom_input,
           batches, channels,
@@ -1252,7 +1252,7 @@ int Ada_EJVSW_Pool3dForwardLauncher(const at::Tensor input,  const int batches,
 
 
 template <typename scalar_t>
-__global__ void Ada_EJVSW_Pool1dBackward(const int nthreads,
+__global__ void Ada_EDSCW_Pool1dBackward(const int nthreads,
                                         const scalar_t *diff_output, const scalar_t *data_input,
                                         const int batches, const int channels,
                                         const int dim, const int kernel_d,
@@ -1296,7 +1296,7 @@ __global__ void Ada_EJVSW_Pool1dBackward(const int nthreads,
         if(d_offset >= dim || d_offset < 0)continue;
         const int offset = d_offset;
 
-        scalar_t dist = jvs(offset_data_input[offset], act_avg);
+        scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
         mask_sum_avg += exp(dist);
 
@@ -1310,7 +1310,7 @@ __global__ void Ada_EJVSW_Pool1dBackward(const int nthreads,
         if(d_offset >= dim || d_offset < 0)continue;
           const int offset = d_offset;
 
-          scalar_t dist = jvs(offset_data_input[offset], act_avg);
+          scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
           scalar_t mask = exp(dist)/mask_sum_avg;
 
@@ -1325,7 +1325,7 @@ __global__ void Ada_EJVSW_Pool1dBackward(const int nthreads,
 }
 
 template <typename scalar_t>
-__global__ void Ada_EJVSW_Pool2dBackward(const int nthreads,
+__global__ void Ada_EDSCW_Pool2dBackward(const int nthreads,
                                         const scalar_t *diff_output, const scalar_t *data_input,
                                         const int batches, const int channels,
                                         const int height, const int width,
@@ -1382,7 +1382,7 @@ __global__ void Ada_EJVSW_Pool2dBackward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
           const int offset = y_offset*width + x_offset;
 
-          scalar_t dist = jvs(offset_data_input[offset], act_avg);
+          scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
           mask_sum_avg += exp(dist);
 
@@ -1401,7 +1401,7 @@ __global__ void Ada_EJVSW_Pool2dBackward(const int nthreads,
           if(x_offset >= width || x_offset < 0)continue;
             const int offset = y_offset*width + x_offset;
 
-            scalar_t dist = jvs(offset_data_input[offset], act_avg);
+            scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
             scalar_t mask = exp(dist)/mask_sum_avg;
 
@@ -1417,7 +1417,7 @@ __global__ void Ada_EJVSW_Pool2dBackward(const int nthreads,
 }
 
 template <typename scalar_t>
-__global__ void Ada_EJVSW_Pool3dBackward(const int nthreads,
+__global__ void Ada_EDSCW_Pool3dBackward(const int nthreads,
                                         const scalar_t *diff_output, const scalar_t *data_input,
                                         const int batches, const int channels,
                                         const int depth, const int height,
@@ -1487,7 +1487,7 @@ __global__ void Ada_EJVSW_Pool3dBackward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
               const int offset = d_offset*height + y_offset*width + x_offset;
 
-              scalar_t dist = jvs(offset_data_input[offset], act_avg);
+              scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
               mask_sum_avg += exp(dist);
 
@@ -1511,7 +1511,7 @@ __global__ void Ada_EJVSW_Pool3dBackward(const int nthreads,
             if(x_offset >= width || x_offset < 0)continue;
               const int offset = d_offset*height + y_offset*width + x_offset;
 
-              scalar_t dist = jvs(offset_data_input[offset], act_avg);
+              scalar_t dist = dsc(offset_data_input[offset], act_avg);
 
               scalar_t mask = exp(dist)/mask_sum_avg;
 
@@ -1527,7 +1527,7 @@ __global__ void Ada_EJVSW_Pool3dBackward(const int nthreads,
     }
 }
 
-int Ada_EJVSW_Pool1dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
+int Ada_EDSCW_Pool1dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
                                     const int batches, const int channels,
                                     const int dim, const int kernel_d,
                                     const int stride_d, at::Tensor input_grad){
@@ -1535,12 +1535,12 @@ int Ada_EJVSW_Pool1dBackwardLauncher(const at::Tensor output_grad, const at::Ten
     const int output_size = batches * dim/stride_d * channels;
 
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(
-        input.scalar_type(), "Ada_EJVSW_Pool1dLauncherBackward", ([&] {
+        input.scalar_type(), "Ada_EDSCW_Pool1dLauncherBackward", ([&] {
         scalar_t *diff_input = input_grad.data_ptr<scalar_t>();
         const scalar_t *diff_output = output_grad.data_ptr<scalar_t>();
         const scalar_t *data_input = input.data_ptr<scalar_t>();
 
-        Ada_EJVSW_Pool1dBackward<scalar_t>
+        Ada_EDSCW_Pool1dBackward<scalar_t>
         <<<GET_BLOCKS(output_size), THREADS_PER_BLOCK>>>(
           output_size, diff_output,
           data_input, batches,
@@ -1559,7 +1559,7 @@ int Ada_EJVSW_Pool1dBackwardLauncher(const at::Tensor output_grad, const at::Ten
   return 1;
 }
 
-int Ada_EJVSW_Pool2dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
+int Ada_EDSCW_Pool2dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
                                     const int batches, const int channels,
                                     const int height, const int width,
                                     const int kernel_h, const int kernel_w,
@@ -1569,12 +1569,12 @@ int Ada_EJVSW_Pool2dBackwardLauncher(const at::Tensor output_grad, const at::Ten
     const int output_size = batches * height/stride_h * width/stride_w * channels;
 
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(
-        input.scalar_type(), "Ada_EJVSW_Pool2dLauncherBackward", ([&] {
+        input.scalar_type(), "Ada_EDSCW_Pool2dLauncherBackward", ([&] {
         scalar_t *diff_input = input_grad.data_ptr<scalar_t>();
         const scalar_t *diff_output = output_grad.data_ptr<scalar_t>();
         const scalar_t *data_input = input.data_ptr<scalar_t>();
 
-        Ada_EJVSW_Pool2dBackward<scalar_t>
+        Ada_EDSCW_Pool2dBackward<scalar_t>
         <<<GET_BLOCKS(output_size), THREADS_PER_BLOCK>>>(
           output_size, diff_output,
           data_input, batches,
@@ -1594,7 +1594,7 @@ int Ada_EJVSW_Pool2dBackwardLauncher(const at::Tensor output_grad, const at::Ten
   return 1;
 }
 
-int Ada_EJVSW_Pool3dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
+int Ada_EDSCW_Pool3dBackwardLauncher(const at::Tensor output_grad, const at::Tensor input,
                                     const int batches, const int channels,
                                     const int depth, const int height,
                                     const int width, const int kernel_d,
@@ -1605,12 +1605,12 @@ int Ada_EJVSW_Pool3dBackwardLauncher(const at::Tensor output_grad, const at::Ten
     const int output_size = batches * depth/stride_d * height/stride_h * width/stride_w * channels;
 
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(
-        input.scalar_type(), "Ada_EJVSW_Pool3dLauncherBackward", ([&] {
+        input.scalar_type(), "Ada_EDSCW_Pool3dLauncherBackward", ([&] {
         scalar_t *diff_input = input_grad.data_ptr<scalar_t>();
         const scalar_t *diff_output = output_grad.data_ptr<scalar_t>();
         const scalar_t *data_input = input.data_ptr<scalar_t>();
 
-        Ada_EJVSW_Pool3dBackward<scalar_t>
+        Ada_EDSCW_Pool3dBackward<scalar_t>
         <<<GET_BLOCKS(output_size), THREADS_PER_BLOCK>>>(
           output_size, diff_output,
           data_input, batches,
