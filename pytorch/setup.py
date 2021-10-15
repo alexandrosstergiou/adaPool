@@ -3,7 +3,7 @@ from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 setup(
     name='adaPool',
-    version='0.2',
+    version='0.1',
     description='CUDA-accelerated package for performing 1D/2D/3D adaPool and adaUpsample with PyTorch',
     author='Alexandros Stergiou',
     author_email='alexstergiou5@gmail.com',
