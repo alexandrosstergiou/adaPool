@@ -19,6 +19,11 @@ Pooling layers are essential building blocks of Convolutional Neural Networks (C
 </p>
 
 
+|Original|<img src="images/original/01.png" width="200" />|<img src="images/original/02.png" width="200" />|<img src="images/original/03.png" width="200" />|<img src="images/original/07.png" width="200" />|<img src="images/original/08.png" width="200" />|<img src="images/original/09.png" width="200" />|
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|adaPool|<img src="images/ada/01.png" width="200" />|<img src="images/ada/02.png" width="200" />|<img src="images/ada/03.png" width="200" />|<img src="images/ada/07.png" width="200" />|<img src="images/ada/08.png" width="200" />|<img src="images/ada/09.png" width="200" />|
+
+
 ## Dependencies
 All parts of the code assume that `torch` is of version 1.4 or higher. There might be instability issues on previous versions.
 
