@@ -25,7 +25,7 @@ Pooling layers are essential building blocks of Convolutional Neural Networks (C
 
 
 ## Dependencies
-All parts of the code assume that `torch` is of version 1.4 or higher. There might be instability issues on previous versions.
+All parts of the code assume that `torch` is of version 1.8 or higher. There might be instability issues on previous versions.
 
 This work relies on the previous repo for exponential maximum pooling (**[alexandrosstergiou/SoftPool](https://github.com/alexandrosstergiou/SoftPool)**). Before opening an issue please do have a look at that repository as common problems in running or installation have been addressed.
 
