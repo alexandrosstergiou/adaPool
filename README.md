@@ -15,7 +15,7 @@ Pooling layers are essential building blocks of Convolutional Neural Networks (C
 <i></i>
 <br>
 <p align="center">
-<a href="#" target="blank" >[arXiv preprint -- coming soon]</a>
+<a href="https://arxiv.org/abs/2111.00772" target="blank" >[arXiv preprint -- coming soon]</a>
 </p>
 
 
