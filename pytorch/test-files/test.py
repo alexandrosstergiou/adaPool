@@ -1,3 +1,6 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+
 import torch
 import adapool_cuda
 from adaPool import adapool1d, adapool2d, adapool3d, AdaPool1d, AdaPool2d, AdaPool3d, adaunpool, EDSCWPool1d, EDSCWPool2d, EDSCWPool3d, EMPool1d, EMPool2d, EMPool3d
@@ -5,33 +8,38 @@ from adaPool import adapool1d, adapool2d, adapool3d, AdaPool1d, AdaPool2d, AdaPo
 import timeit
 import traceback
 
+import sys
 
 
 print('\033[\033[38;2;50;50;50;48;2;85;217;192m' + ' = = = Checks for float16 = = = ' + '\033[0m')
 
-x_1d = torch.rand((4, 16, 56), device='cuda:0').half()
-beta_1d = (28)
+x_1d = torch.rand((1, 1, 8), device='cuda:0').half()
+beta_1d = (4)
 
-x_2d = torch.rand((4, 16, 56, 56), device='cuda:0').half()
-beta_2d = (28,28)
+x_2d = torch.rand((1, 1, 8, 8), device='cuda:0').half()
+beta_2d = (4,4)
 
-x_3d = torch.rand((4, 16, 4, 56, 56), device='cuda:0').half()
-beta_3d = (2,28,28)
+x_3d = torch.rand((1, 1, 8, 8, 8), device='cuda:0').half()
+beta_3d = (4,4,4)
 
 
 print('\033[38;2;77;216;173m' + '--- Performing checks for forward ---' + '\033[0m')
 
 
 print('\033[38;2;199;246;236m' + '> Checking 1D ...' + '\033[0m')
+k=4
+s=4
+p_1d = AdaPool1d(kernel_size=k, beta=(1), stride=s, return_mask=True, device='cuda:0')
+_ ,mask = p_1d(x_1d)
+print('kernel size:',k,'stride:',s,'\n mask:',mask[0].data)
 
-p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=(1))
-_ = p_1d(x_1d)
+p_2d = AdaPool2d(kernel_size=k, beta=(1,1), stride=s, return_mask=True, device='cuda:0')
+_ ,mask = p_2d(x_2d)
+print('kernel size:',k,'stride:',s,'\n mask:',mask[0].data)
 
-p_2d = AdaPool2d(dtype=x_2d.dtype,device=x_2d.get_device(),beta=(1,1))
-_ = p_2d(x_2d)
-
-p_3d = AdaPool3d(dtype=x_3d.dtype,device=x_3d.get_device(),beta=(1,1,1))
-_ = p_3d(x_3d)
+p_3d = AdaPool3d(kernel_size=k, beta=(1,1,1), stride=s, return_mask=True, device='cuda:0')
+_ ,mask = p_3d(x_3d)
+print('kernel size:',k,'stride:',s,'\n mask:',mask[0].data)
 
 try:
     p_1d = AdaPool1d(dtype=x_1d.dtype,device=x_1d.get_device(),beta=beta_1d)

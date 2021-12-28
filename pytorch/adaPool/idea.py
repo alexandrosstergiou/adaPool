@@ -30,7 +30,7 @@ class CUDA_ADAPOOL1d(Function):
 
         output = input.new_zeros((B, C, oD))
         if return_mask:
-            mask = input.new_zeros((B, D))
+            mask = input.new_zeros((B, kernel[0] * oD))
         else:
             mask = input.new_zeros((1))
 
@@ -82,7 +82,7 @@ class CUDA_ADAPOOL1d_EDSCW(Function):
         oD = (D-kernel[0]) // stride[0] + 1
         output = input.new_zeros((B, C, oD))
         if return_mask:
-            mask = input.new_zeros((B, D))
+            mask = input.new_zeros((B, kernel[0] * oD))
         else:
             mask = input.new_zeros((1))
 
@@ -131,7 +131,7 @@ class CUDA_IDWPOOL1d(Function):
         oD = (D-kernel[0]) // stride[0] + 1
         output = input.new_zeros((B, C, oD))
         if return_mask:
-            mask = input.new_zeros((B, D))
+            mask = input.new_zeros((B, kernel[0] * oD))
         else:
             mask = input.new_zeros((1))
 
@@ -179,7 +179,7 @@ class CUDA_ADAPOOL1d_EM(Function):
         oD = (D-kernel[0]) // stride[0] + 1
         output = input.new_zeros((B, C, oD))
         if return_mask:
-            mask = input.new_zeros((B, D))
+            mask = input.new_zeros((B, kernel[0] * oD))
         else:
             mask = input.new_zeros((1))
 
@@ -233,7 +233,7 @@ class CUDA_ADAPOOL2d(Function):
 
         output = input.new_zeros((B, C, oH, oW))
         if return_mask:
-            mask = input.new_zeros((B, H, W))
+            mask = input.new_zeros((B, kernel[0] * oH, kernel[1] * oW))
         else:
             mask = input.new_zeros((1))
 
@@ -287,7 +287,7 @@ class CUDA_ADAPOOL2d_EDSCW(Function):
 
         output = input.new_zeros((B, C, oH, oW))
         if return_mask:
-            mask = input.new_zeros((B, H, W))
+            mask = input.new_zeros((B, kernel[0] * oH, kernel[1] * oW))
         else:
             mask = input.new_zeros((1))
 
@@ -337,7 +337,7 @@ class CUDA_IDWPOOL2d(Function):
 
         output = input.new_zeros((B, C, oH, oW))
         if return_mask:
-            mask = input.new_zeros((B, H, W))
+            mask = input.new_zeros((B, kernel[0] * oH, kernel[1] * oW))
         else:
             mask = input.new_zeros((1))
 
@@ -388,7 +388,7 @@ class CUDA_ADAPOOL2d_EM(Function):
 
         output = input.new_zeros((B, C, oH, oW))
         if return_mask:
-            mask = input.new_zeros((B, H, W))
+            mask = input.new_zeros((B, kernel[0] * oH, kernel[1] * oW))
         else:
             mask = input.new_zeros((1))
 
@@ -443,7 +443,7 @@ class CUDA_ADAPOOL3d(Function):
 
         output = input.new_zeros((B, C, oD, oH, oW))
         if return_mask:
-            mask = input.new_zeros((B, D, H, W))
+            mask = input.new_zeros((B, kernel[0] * oD, kernel[1] * oH, kernel[2] * oW))
         else:
             mask = input.new_zeros((1))
 
@@ -498,7 +498,7 @@ class CUDA_ADAPOOL3d_EDSCW(Function):
 
         output = input.new_zeros((B, C, oD, oH, oW))
         if return_mask:
-            mask = input.new_zeros((B, D, H, W))
+            mask = input.new_zeros((B, kernel[0] * oD, kernel[1] * oH, kernel[2] * oW))
         else:
             mask = input.new_zeros((1))
 
@@ -549,7 +549,7 @@ class CUDA_IDWPOOL3d(Function):
 
         output = input.new_zeros((B, C, oD, oH, oW))
         if return_mask:
-            mask = input.new_zeros((B, D, H, W))
+            mask = input.new_zeros((B, kernel[0] * oD, kernel[1] * oH, kernel[2] * oW))
         else:
             mask = input.new_zeros((1))
 
@@ -600,7 +600,7 @@ class CUDA_ADAPOOL3d_EM(Function):
 
         output = input.new_zeros((B, C, oD, oH, oW))
         if return_mask:
-            mask = input.new_zeros((B, D, H, W))
+            mask = input.new_zeros((B, kernel[0] * oD, kernel[1] * oH, kernel[2] * oW))
         else:
             mask = input.new_zeros((1))
 
