@@ -36,7 +36,7 @@ This work relies on the previous repo for exponential maximum pooling (**[alexan
 You can build the repo through the following commands:
 ```
 $ git clone https://github.com/alexandrosstergiou/adaPool.git
-$ cd adaPool-master/pytorch
+$ cd adaPool/pytorch
 $ make install
 --- (optional) ---
 $ make test
