@@ -1,4 +1,4 @@
-# [T-IP] AdaPool: Exponential Adaptive Pooling for Information-Retaining Downsampling
+# AdaPool: Exponential Adaptive Pooling for Information-Retaining Downsampling
 ![supported versions](https://img.shields.io/badge/python-3.x-brightgreen/?style=flat&logo=python&color=green)
 ![Library](https://img.shields.io/badge/library-PyTorch-blue?logo=Pytorch)
 ![GitHub license](https://img.shields.io/cocoapods/l/AFNetworking)
