@@ -15,6 +15,7 @@ Pooling layers are essential building blocks of convolutional neural networks (C
 <i></i>
 <br>
 <p align="center">
+<a href="https://ieeexplore.ieee.org/abstract/document/9982650" target="blank" >[IEEExplore link]</a>&nbsp;&nbsp;
 <a href="https://arxiv.org/abs/2111.00772" target="blank" >[arXiv preprint]</a>
 </p>
 
@@ -71,13 +72,12 @@ from adaPool import IDWPool1d, IDWPool2d, IDWPool3d
 ## Citation
 
 ```
-@article{stergiou2021adapool,
+@article{stergiou2022adapool,
   author={Stergiou, Alexandros and Poppe, Ronald},
   journal={IEEE Transactions on Image Processing}, 
   title={AdaPool: Exponential Adaptive Pooling for Information-Retaining Downsampling}, 
   year={2023},
   volume={32},
-  number={},
   pages={251-266},
   doi={10.1109/TIP.2022.3227503}}
 ```
