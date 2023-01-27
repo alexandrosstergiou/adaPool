@@ -32,6 +32,15 @@ This work relies on the previous repo for exponential maximum pooling (**[alexan
 
 > ***! Disclaimer:*** This repository is heavily structurally influenced on Ziteng Gao's LIP repo [https://github.com/sebgao/LIP](https://github.com/sebgao/LIP)
 
+### (Optional pre-installation step)
+
+Some building issues can be resolved by using older gcc/g++ versions:
+```
+$ sudo apt install gcc-10 g++-10
+$ export CC=/usr/bin/gcc-10
+$ export CXX=/usr/bin/g++-10
+```
+
 ## Installation
 
 You can build the repo through the following commands:
